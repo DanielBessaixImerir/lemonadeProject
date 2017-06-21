@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -44,7 +47,7 @@ public class Main {
     }
     
     
-    
+    //fonction liste en string
     public static String InputStreamToString (InputStream in, int bufSize) {         
         final StringBuilder out = new StringBuilder(); 
         final byte[] buffer = new byte[bufSize]; 
@@ -58,6 +61,11 @@ public class Main {
         }
         // On retourne la chaine contenant les donnees de l'InputStream
         return out.toString(); 
+    }
+    public static JSONObject stringToJSON(String jsonString) throws JSONException{
+    	JSONObject jsonObj = new JSONObject(jsonString);
+    	System.out.println(jsonString);
+		return jsonObj;
     }
 
 }
