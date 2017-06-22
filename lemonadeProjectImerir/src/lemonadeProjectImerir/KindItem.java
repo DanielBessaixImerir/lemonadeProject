@@ -1,5 +1,4 @@
 package lemonadeProjectImerir;
 
-public class test {
-int i;
+public enum KindItem {AD,STAND
 }
