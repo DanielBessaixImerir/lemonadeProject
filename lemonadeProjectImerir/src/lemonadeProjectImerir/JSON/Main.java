@@ -5,7 +5,9 @@ public class Main {
 		//getPersonnes();
 		//HtmlPOST.sendJSON("https://tranquil-reef-75630.herokuapp.com/");
 		//Gson g = new GsonBuilder().create();
-		System.out.println(JsonWrite.SaleRequest("Daniel","margarita",3));
+		//System.out.println(JsonWrite.SaleRequest("Daniel","margarita",3));
+		System.out.println(JsonWrite.stringToJson("{\"player\":\"dani\",\"item\":\"stand\",\"quantity\":\"5\"}").toString());
 	}
 	
 }
+

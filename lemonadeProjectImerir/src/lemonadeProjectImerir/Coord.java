@@ -1,6 +1,27 @@
 package lemonadeProjectImerir;
 
+import com.google.gson.JsonObject;
+
 public class Coord {
+	public Coord(float longitude, float latitude) {
+		super();
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+	public Coord(JsonObject json, boolean isSpan){
+		if(isSpan){
+			
+			this.latitude = json.get("latitudeSpan").getAsFloat();
+			this.longitude = json.get("longitudeSpan").getAsFloat();
+			
+		}else{
+			
+			this.latitude = json.get("latitude").getAsFloat();
+			this.longitude = json.get("longitude").getAsFloat();
+		}
+		
+	}
+
 	public float getLongitude() {
 		return longitude;
 	}
@@ -29,4 +50,5 @@ public class Coord {
 		double metre = miles*1869;
 		return metre;
 	}
+
 }
