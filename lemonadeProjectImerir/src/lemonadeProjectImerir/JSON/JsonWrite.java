@@ -7,7 +7,6 @@ import java.io.*;
 
 public class JsonWrite {
 	public static void main(String[] arg){
-		
-			
+	
 		}
 	}

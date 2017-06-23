@@ -12,7 +12,7 @@ public class Sell {
 	
 	private void InstintiateClients(Map map){
 		if (clients.isEmpty()){
-			int nbLat = map.getRegion().get;
+			//int nbLat = map.getRegion().get;
 			int nbLong = 1;
 		}
 	}
