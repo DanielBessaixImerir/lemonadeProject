@@ -8,14 +8,20 @@
 #include <json-c/json.h>
 #include <curl/curl.h>
 #include <stdbool.h>
+#include <string.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <unistd.h>
 
 char *randWeather[] = {"rainny", "cloudy", "sunny", "heatwave", "thunderstorm"};
+int USB, nb, i = 0, j = 0, val1, val2;
+char buffer[20], tmpBuf[2];
 
 json_object* createJson(int hour,int weather, bool isForecast ){
     /* creation du json object*/
     json_object *json;
     json_object *forecast;
-    printf("debug");
+    //printf("debug");
     json = json_object_new_object();
     forecast = json_object_new_object();
     json_object_object_add(json, "hour", json_object_new_int(hour));
@@ -50,12 +56,76 @@ json_object* POST(char *url, json_object *json){
     curl_easy_cleanup(ch);
     curl_slist_free_all(headers);
     //json_object_put(json);
-    printf("Parsed JSON: %s\n", json_object_to_json_string(json));
+    printf("\n");
+    //printf("Parsed JSON: %s\n", json_object_to_json_string(json));
     return json;
 }
 
-int main(int argc, char *argv[]) {
-    json_object *json;
-    json=createJson(5,4,TRUE);
-    POST("https://tranquil-reef-75630.herokuapp.com/test",json);
+
+void serialPort()
+{
+
+    int lastHour = -1;
+    printf ("usb: %d !",USB);
+    do {
+        USB = open("/dev/ttyACM0", O_RDONLY);
+        nb = read(USB, buffer, sizeof(buffer) - 1);
+        printf("%d\n", nb);
+                //Reinitialisation de tmpBuf
+        strcpy(tmpBuf, "");
+        j = 0;
+        //printf ("nb: %d",nb);
+        if (nb > 1)
+        {
+
+            buffer[nb] = '\0';
+            if (nb == 1) {
+                printf("buffer : %d\n", buffer[0]);
+            }
+            for (i = 0; i < strlen(buffer); i++)
+            {
+                if (buffer[i] == '[')
+                {
+                    j = 0;
+                    tmpBuf[j] = buffer[i];
+                    j++;
+                }
+                else if (buffer[i] == ']')
+                {
+                    tmpBuf[j] = buffer[i];
+                    tmpBuf[j+1] = '\0';
+                    break;
+                }
+                else
+                {
+
+                    tmpBuf[j] = buffer[i];
+                    j++;
+                }
+                //printf("buffer : %s\n", buffer);
+
+
+                sscanf(tmpBuf,"[%d|%d]",&val1,&val2);
+
+                printf("heure : %d\n",val1);
+                printf("meteo : %d\n",val2);
+
+
+            }
+
+        }
+        if (val1!=lastHour){
+            json_object *json;
+            json=createJson(val1,val2,FALSE);
+            POST("https://tranquil-reef-75630.herokuapp.com/test",json);
+            lastHour=val1;
+        }
+        close(USB);
+    } while(1);
 }
+
+int main(int argc, char *argv[]) {
+    serialPort();
+
+}
+
