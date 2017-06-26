@@ -9,7 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HtmlPOST {
-	 static void sendJSON(String strUrl){
+	 static void sendJSON(String strUrl, String name, String item, int quantity){
 	    	try {
 		    	URL url = new URL(strUrl);
 		        HttpURLConnection connection;
@@ -26,9 +26,9 @@ public class HtmlPOST {
 		        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());  
 		        out.write(
 		                "[{" +
-		                "\"player\":\"dani\"," +
-		                "\"item\":\"stand\"," +
-		                "\"quantity\":\"5\"" +
+		                "\"player\":"+name +"," +
+		                "\"item\":"+item+"," +
+		                "\"quantity\":"+ quantity+
 		                "}]");
 		        out.flush();
 		        out.close();
