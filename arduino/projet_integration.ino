@@ -79,9 +79,6 @@ void loop() {
   weatherOutput();
   buttonUpdate();
   buttonOutput();
-  Serial.print("second    ");
-  Serial.println(second);
-//  lcd.print(analogRead(A0));
 }
 
 
@@ -260,10 +257,11 @@ void buttonOutput()
       second -= 50;
       if (second < 3000)
       {
-        second = 300;
+        second = 3000;
       }
       break;
-    case BS_DECREASE:   {
+    case BS_DECREASE:
+      {
         second += 50;
         if (second > 20000)
         {
