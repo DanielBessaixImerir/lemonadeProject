@@ -50,5 +50,9 @@ public class Coord {
 		double metre = miles*1869;
 		return metre;
 	}
+	@Override
+	public String toString() {
+		return "Coord [longitude=" + longitude + ", latitude=" + latitude + "]";
+	}
 
 }

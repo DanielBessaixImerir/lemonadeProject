@@ -20,13 +20,14 @@ public class Map {
 		jsonPlayerInfo = map.getAsJsonObject("playerInfo");
 		this.players = new ArrayList<Player>();
 		for (int i=0;i<jsonRanking.size();i++){
-			this.players.add(new Player(jsonRanking.get(i).getAsString(),jsonPlayerInfo.getAsJsonObject(jsonRanking.get(i).getAsString())));
+			String playerName=jsonRanking.get(i).getAsString();
+			this.players.add(new Player(playerName,jsonPlayerInfo.getAsJsonObject(playerName),map.getAsJsonObject("itemsByPlayer").getAsJsonArray(playerName)));
 		}
 		this.setHour(metrologie.get("timestamp").getAsInt());
 		String weather;
-		weather = metrologie.get("weather").getAsJsonObject().get("weather").getAsString().toUpperCase();
+		weather = metrologie.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("weather").getAsString().toUpperCase();
 		this.actualWeather=Weather.valueOf(weather);
-		weather = metrologie.get("weather").getAsJsonObject().get("forecast").getAsString().toUpperCase();
+		weather = metrologie.get("weather").getAsJsonArray().get(1).getAsJsonObject().get("weather").getAsString().toUpperCase();
 		this.forecast=Weather.valueOf(weather);
 	}
 	
@@ -140,5 +141,15 @@ public class Map {
 				}
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		String players ="\n		";
+		for (int i=0;i<this.players.size();i++){
+			players = players + this.players.get(i).toString()+"\n		";
+		}
+		return "Map [region=" + region + ",\n players=" + players + ",\n forecast=" + forecast + ",\n actualWeather="
+				+ actualWeather + ",\n hour=" + hour + "]";
 	}
 }

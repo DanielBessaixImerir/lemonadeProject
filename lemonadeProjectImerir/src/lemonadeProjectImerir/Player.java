@@ -13,22 +13,25 @@ public class Player {
 	private ArrayList<Drink> drinks;
 	private ArrayList<MapItem> mapItem;
 	
-	public Player(String name, JsonObject jsonPlayer, JsonObject jsonMapItem){
+	public Player(String name, JsonObject jsonPlayer, JsonArray jsonArrayMapItem){
+		this.namePlayer = name;
 		this.cash = jsonPlayer.get("cash").getAsInt();
 		this.sales = jsonPlayer.get("sales").getAsInt();
 		this.profit = jsonPlayer.get("profit").getAsFloat();
 		this.drinks = new ArrayList<Drink>();
+		this.mapItem = new ArrayList<MapItem>();
+		
 		JsonArray jsonArrayDrink = jsonPlayer.get("drinksOffered").getAsJsonArray();
 		for (int i=0;i<jsonArrayDrink.size();i++){
 			this.drinks.add(new Drink(jsonArrayDrink.get(i).getAsJsonObject()));
 		}
-		JsonArray jsonArrayMapItem = jsonMapItem.getAsJsonArray();
 		for (int i=0;i<jsonArrayMapItem.size();i++){
 			this.mapItem.add(new MapItem(jsonArrayMapItem.get(i).getAsJsonObject()));
 		}
 	}
 	
 	public Player(String name, JsonObject jsonPlayer){
+		this.namePlayer = name;
 		this.cash = jsonPlayer.get("cash").getAsInt();
 		this.sales = jsonPlayer.get("sales").getAsInt();
 		this.profit = jsonPlayer.get("profit").getAsFloat();
@@ -132,5 +135,15 @@ public class Player {
 			i++;
 		}
 	return ret;
+	}
+
+	@Override
+	public String toString() {
+		String mapItem = "";
+		for (int i=0;i<this.mapItem.size();i++){
+			mapItem = mapItem + this.mapItem.get(i).toString();
+		}
+		return "Player [namePlayer=" + namePlayer + ", cash=" + cash + ", sales=" + sales + ", profit=" + profit
+				+ ", drinks=" + drinks + ", mapItem=" + mapItem + "]";
 	}
 }

@@ -54,4 +54,10 @@ public class Drink {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Drink [price=" + price + ", name=" + name + ", sells=" + sells + ", hasAlcohol=" + hasAlcohol
+				+ ", isCold=" + isCold + "]";
+	}
 }

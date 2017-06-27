@@ -8,15 +8,17 @@ public class MapItem {
 	private float influence;
 	private String Owner;
 	
-	public MapItem(JsonObject json){
-		this.location = new Coord(json.get("location").getAsJsonObject(),false);
-		if(json.get("Kind").getAsString().equals(KindItem.AD.toString())){
+	public MapItem(JsonObject jsonItem){
+		this.location = new Coord(jsonItem.get("location").getAsJsonObject(),false);
+		
+		if(jsonItem.get("kind").getAsString().equals(KindItem.AD.toString())){
 			this.kind = KindItem.AD;
 		}else{
 			this.kind = KindItem.STAND;
 		}
-		this.influence = json.get("influence").getAsFloat();
-		this.setOwner(json.get("owner").getAsString());
+		
+		this.influence = jsonItem.get("influence").getAsFloat();
+		this.setOwner(jsonItem.get("owner").getAsString());
 	}
 
 	public Coord getLocation() {
@@ -49,5 +51,11 @@ public class MapItem {
 
 	public void setOwner(String owner) {
 		Owner = owner;
+	}
+
+	@Override
+	public String toString() {
+		return "MapItem [location=" + location + ", kind=" + kind + ", influence=" + influence + ", Owner=" + Owner
+				+ "]";
 	}
 }

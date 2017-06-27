@@ -27,4 +27,9 @@ public class Region {
 		Coord center = new Coord(0,0);
 		Coord span = new Coord(0,0);
 	}
+
+	@Override
+	public String toString() {
+		return "Region [center=" + center + ", span=" + span + "]";
+	}
 }
