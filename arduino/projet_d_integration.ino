@@ -39,10 +39,9 @@ int BUTTON_PIN = A0;
 
 
 //Shared variables
-int normalDay, j, weatherActual, weatherForecast, wf;
+int i, j, wf, normalDay, weatherActual, weatherForecast;
 boolean weatherGenerated, etatButton;
-unsigned long chrono;
-unsigned long lastTime, currentTime;
+unsigned long chrono, lastTime;
 long second, hour;
 String data;
 
@@ -177,8 +176,8 @@ void weatherUpdate()
       break;
 
     case WS_FORECAST:
-      weatherActual = W(weatherForecast);
-      weatherForecast = random(0, 5);
+      weatherActual = weather(weatherForecast);
+      weatherForecast = forecast();
       nextState = WS_IDLE;
       break;
   }
@@ -202,7 +201,7 @@ void weatherOutput()
 }
 
 
-
+//Initialize buttons from the Arduino and the period of one hour
 void buttonInit()
 {
   pinMode(BUTTON_PIN, INPUT);
@@ -211,9 +210,9 @@ void buttonInit()
   etatButton = false;
 }
 
+//Update the flow of one hour
 void buttonUpdate()
 {
-  currentTime = millis();
   BUTTON_PIN = analogRead(A0);
   etatButton = digitalRead(BUTTON_PIN);
   BUTTON_STATE nextState = buttonState;
@@ -221,19 +220,19 @@ void buttonUpdate()
   switch (buttonState)
   {
     case BS_IDLE:
-      if (BUTTON_PIN >= 50 && BUTTON_PIN < 250 && etatButton && (currentTime - lastTime) >= 50)
+      if (BUTTON_PIN >= 50 && BUTTON_PIN < 250 && etatButton && (millis() - lastTime) >= 50)
       {
-        lastTime = currentTime;
+        lastTime = millis();
         nextState = BS_INCREASE;
       }
-      else if (BUTTON_PIN >= 250 && BUTTON_PIN < 450 && etatButton && (currentTime - lastTime) >= 50)
+      else if (BUTTON_PIN >= 250 && BUTTON_PIN < 450 && etatButton && (millis() - lastTime) >= 50)
       {
-        lastTime = currentTime;
+        lastTime = millis();
         nextState = BS_DECREASE;
       }
-      else if (BUTTON_PIN >= 650 && BUTTON_PIN < 850 && etatButton && (currentTime - lastTime) >= 50)
+      else if (BUTTON_PIN >= 650 && BUTTON_PIN < 850 && etatButton && (millis() - lastTime) >= 50)
       {
-        lastTime = currentTime;
+        lastTime = millis();
         nextState = BS_NORMALDAY;
       }
       break;
@@ -253,6 +252,7 @@ void buttonUpdate()
   buttonState = nextState;
 }
 
+//Increase, decrease or rest of the time flow
 void buttonOutput()
 {
   switch (buttonState)
@@ -260,7 +260,7 @@ void buttonOutput()
     case BS_IDLE:
       second += 0;
       break;
-      
+
     case BS_INCREASE:
       second -= 50;
       if (second < 3000)
@@ -268,7 +268,7 @@ void buttonOutput()
         second = 3000;
       }
       break;
-      
+
     case BS_DECREASE:
       second += 50;
       if (second > 20000)
@@ -283,9 +283,8 @@ void buttonOutput()
   }
 }
 
-
-//This function allow to forecast for the day d+1
-int W (int wf)
+//This function update the weather of today
+int weather (int wf)
 {
   j = random(0, 100);
   if (j >= 0 && j < 5)
@@ -307,6 +306,32 @@ int W (int wf)
   else
   {
     return wf;
+  }
+}
+
+//This function allow to forecast for the day d+1
+int forecast ()
+{
+  i = random(0, 20);
+  if (i == 0)
+  {
+    return 4;
+  }
+  if (i >= 1 && i < 4)
+  {
+    return 0;
+  }
+  if (i >= 4 && i < 8)
+  {
+    return 1;
+  }
+  if (i >= 8 && i < 16)
+  {
+    return 2;
+  }
+  else
+  {
+    return 3;
   }
 }
 
