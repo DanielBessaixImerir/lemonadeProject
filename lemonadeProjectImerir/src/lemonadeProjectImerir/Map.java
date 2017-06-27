@@ -86,7 +86,7 @@ public class Map {
 	 * @param coord
 	 * @return
 	 */
-	private ArrayList<Player> getArrayOfInterestedShop(Coord coord){
+	private ArrayList<Player> getArrayOfInterestedShopByInfluence(Coord coord){
 		ArrayList<Player> player = new ArrayList<Player>();
 		int i=0; int j=0;
 		while (i<this.players.size()){
@@ -103,10 +103,26 @@ public class Map {
 		return player;
 	}
 	
+	/*private ArrayList<Player> getArrayOfInterstedShopByDrinks(){
+		ArrayList<Player> shop = new ArrayList<Player>();
+		boolean wantedColdDrinks=true;
+		boolean wantedAlcohol=false;
+		if (this.hour<6||this.hour>18){
+			wantedColdDrinks=false;
+			wantedAlcohol=true;
+		}
+		shop.add(e)
+		return shop;
+		
+	}*/
+	
 	
 	private void chooseStand(Coord coordSeller){
 		ArrayList<Player> InterestedShop;
-		InterestedShop = getArrayOfInterestedShop(coordSeller);
+		InterestedShop = getArrayOfInterestedShopByInfluence(coordSeller);
+		if (this.actualWeather==Weather.HEATWAVE){
+			int i=0;
+		}
 		if (InterestedShop.size()>0){
 			if(InterestedShop.size()>1){
 				double distanceTotal=0;
@@ -120,7 +136,7 @@ public class Map {
 					total+=proba[i];
 				}
 				for (int i=0; i<InterestedShop.size();i++){
-					
+					proba[i]=proba[i]/total;
 				}
 			}
 		}

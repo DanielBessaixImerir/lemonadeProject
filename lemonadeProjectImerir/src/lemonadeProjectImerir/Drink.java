@@ -35,7 +35,7 @@ public class Drink {
 	public void setSells(int sells) {
 		this.sells = sells;
 	}
-	public boolean isHasAlcohol() {
+	public boolean hasAlcohol() {
 		return hasAlcohol;
 	}
 	public void setHasAlcohol(boolean hasAlcohol) {
@@ -46,5 +46,12 @@ public class Drink {
 	}
 	public void setCold(boolean isCold) {
 		this.isCold = isCold;
+	}
+	
+	public boolean isWantedDrink(boolean alcohol, boolean cold){
+		if (this.isCold()==cold || this.hasAlcohol()==alcohol){
+			return true;
+		}
+		return false;
 	}
 }

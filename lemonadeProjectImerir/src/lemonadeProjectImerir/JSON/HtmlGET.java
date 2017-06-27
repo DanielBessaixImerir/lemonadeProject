@@ -6,13 +6,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HtmlGET {
-	 public static String getGETResponse() {
+	 public static String getGETResponse(String myurl) {
 	        
 	        String ret ="";
 	         
 	        try {
 	        	// url a voir
-	            String myurl= "https://tranquil-reef-75630.herokuapp.com/heure";
+	            //String myurl= "https://tranquil-reef-75630.herokuapp.com/heure";
 	            // création de l'url
 	            URL url = new URL(myurl);
 	            // preparation de la connection

@@ -107,4 +107,30 @@ public class Player {
 		}
 		return mapItem.get(i-1);
 	}
+	
+	public ArrayList<MapItem> getAd(){
+		int i=0;
+		ArrayList<MapItem> ret = new ArrayList<MapItem>();
+		while (i<this.mapItem.size()){
+			if(this.mapItem.get(i).getKind()==KindItem.AD){
+				if(this.mapItem.get(i).getOwner().equals(this.namePlayer)){
+					ret.add(this.mapItem.get(i));
+				}
+			}
+			i++;
+		}
+		return ret;
+	}
+	
+	public boolean hasWantedDrinks(boolean alcohol, boolean cold){
+	boolean ret=false;
+	int i=0;
+		while (i<this.drinks.size()){
+			if (this.drinks.get(i).isWantedDrink(alcohol, cold)){
+				ret = true;
+			}
+			i++;
+		}
+	return ret;
+	}
 }

@@ -16,7 +16,7 @@ public class MapItem {
 			this.kind = KindItem.STAND;
 		}
 		this.influence = json.get("influence").getAsFloat();
-		this.Owner = json.get("owner").getAsString();
+		this.setOwner(json.get("owner").getAsString());
 	}
 
 	public Coord getLocation() {
@@ -41,5 +41,13 @@ public class MapItem {
 
 	public void setInfluence(float influence) {
 		this.influence = influence;
+	}
+
+	public String getOwner() {
+		return Owner;
+	}
+
+	public void setOwner(String owner) {
+		Owner = owner;
 	}
 }

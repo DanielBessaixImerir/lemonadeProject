@@ -13,7 +13,7 @@ public class Main {
 		//getPersonnes();
 		//HtmlPOST.sendJSON("https://tranquil-reef-75630.herokuapp.com/");
 		//Gson g = new GsonBuilder().create();
-		System.out.println(JsonWrite.SaleRequest("Daniel","margarita",3));
+		/*System.out.println(JsonWrite.SaleRequest("Daniel","margarita",3));
 		JsonObject json = new JsonObject();
 		String test ="cloudy";
 		System.out.println(test);
@@ -21,7 +21,8 @@ public class Main {
 		System.out.println(test);
 		if (Weather.CLOUDY == Weather.valueOf(test)){
 			System.out.println("coucou");
-		}
+		}*/
+		System.out.println(HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/map"));
 		
 	}
 	
