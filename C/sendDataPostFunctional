@@ -78,7 +78,7 @@ void serialPort()
     printf ("usb: %d !",USB);
     USB = open("/dev/ttyACM0", O_RDONLY);
     do {
-
+        strcpy(buffer,"");
         nb = read(USB, buffer, sizeof(buffer) - 1);
 
         //Reinitialisation de tmpBuf
@@ -127,6 +127,7 @@ void serialPort()
             printf(json_object_to_json_string(json));
             POST("https://tranquil-reef-75630.herokuapp.com/metrology", json);
             lastHour = val1;
+            json_object_put(json);
         }
     } while(1);
     close(USB);
