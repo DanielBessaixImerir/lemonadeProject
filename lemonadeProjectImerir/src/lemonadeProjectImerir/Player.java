@@ -12,6 +12,7 @@ public class Player {
 	private float profit;
 	private ArrayList<Drink> drinks;
 	private ArrayList<MapItem> mapItem;
+	private Color color;
 	
 	public Player(String name, JsonObject jsonPlayer, JsonArray jsonArrayMapItem){
 		this.namePlayer = name;
@@ -28,6 +29,7 @@ public class Player {
 		for (int i=0;i<jsonArrayMapItem.size();i++){
 			this.mapItem.add(new MapItem(jsonArrayMapItem.get(i).getAsJsonObject()));
 		}
+		this.color = new Color();
 	}
 	
 	public Player(String name, JsonObject jsonPlayer){
@@ -41,6 +43,7 @@ public class Player {
 			this.drinks.add(new Drink(jsonArrayDrink.get(i).getAsJsonObject()));
 		}
 		mapItem = new ArrayList<MapItem>();
+		this.color = new Color();
 	}
 	
 	public void addMapItem(JsonObject mapItem){
@@ -125,6 +128,14 @@ public class Player {
 		return ret;
 	}
 	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	public boolean hasWantedDrinks(boolean alcohol, boolean cold){
 	boolean ret=false;
 	int i=0;

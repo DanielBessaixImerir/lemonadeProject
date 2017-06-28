@@ -21,6 +21,8 @@ public class Map {
 		this.players = new ArrayList<Player>();
 		for (int i=0;i<jsonRanking.size();i++){
 			String playerName=jsonRanking.get(i).getAsString();
+			System.out.println(jsonPlayerInfo.getAsJsonObject(playerName));
+			System.out.println(map.getAsJsonObject("itemsByPlayer").getAsJsonArray(playerName));
 			this.players.add(new Player(playerName,jsonPlayerInfo.getAsJsonObject(playerName),map.getAsJsonObject("itemsByPlayer").getAsJsonArray(playerName)));
 		}
 		this.setHour(metrologie.get("timestamp").getAsInt());
@@ -64,7 +66,8 @@ public class Map {
 	}
 	
 	/**
-	 * Is used to simulate client on a basis that there are one client each "pers" degree, It use the function chooseStand
+	 * Is used to simulate client on a basis that there are one client each "pers" degree, It use the function chooseStand 7
+	 * pers conseillé = 33
 	 * @param pers
 	 */
 	public void simulateClients(int pers){
@@ -104,18 +107,34 @@ public class Map {
 		return player;
 	}
 	
-	/*private ArrayList<Player> getArrayOfInterstedShopByDrinks(){
-		ArrayList<Player> shop = new ArrayList<Player>();
-		boolean wantedColdDrinks=true;
-		boolean wantedAlcohol=false;
-		if (this.hour<6||this.hour>18){
-			wantedColdDrinks=false;
-			wantedAlcohol=true;
+	/**
+	 * return 0 for a cold drink, 1 for a hot one, 2 for a alcoholised one 
+	 * @return
+	 */
+	private int getWantedDrink(){
+		int typeDrink = 0;
+		int alcoholProba=0, coldProba=0;
+		if (this.hour<6||this.hour>20){
+			alcoholProba++;
 		}
-		shop.add(e)
+		if (this.getActualWeather().equals(Weather.HEATWAVE)||this.getActualWeather().equals(Weather.HEATWAVE)){
+			coldProba++;
+		}
+		if (this.getActualWeather().equals(Weather.THUNDERSTORM)||this.getActualWeather().equals(Weather.RAINY)){
+			coldProba--;
+		}
+		boolean willBeCold;
+		boolean wouldHaveAlcohol;
+		
+		return typeDrink;
+		
+	}
+	
+	private ArrayList<Player> getArrayOfInterstedShopByDrinks(){
+		ArrayList<Player> shop = new ArrayList<Player>();
 		return shop;
 		
-	}*/
+	}
 	
 	
 	private void chooseStand(Coord coordSeller){
@@ -140,6 +159,7 @@ public class Map {
 					proba[i]=proba[i]/total;
 				}
 			}
+			//ici pour ajouter ce que l'on fait sur les hsop interessant
 		}
 	}
 
