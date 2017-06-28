@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<title>Lemonade Simulator Online 2017 Edition : Golden Membership (Premium)</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+	<script src="home.js"></script>
+	<link rel="stylesheet" type="text/css" href="home.css">
+  </head>
+  <body>
+	<fieldset align="left" class="currentPlayerFS">
+		<legend align="left">
+			Connected as
+		</legend>
+		<span id="currentPlayer"></span>
+	</fieldset>
+	<fieldset align="left" class="playerListFS">
+		<legend align="left">
+			Player List
+		</legend>
+		<span id="playerList"></span>
+	</fieldset>
+  	<table>
+		<fieldset align="left" class="situationFS">
+		<legend align="center">
+			Situation
+		</legend>
+		<form action="#">
+			<label for="day">Day # </label>
+			<span id="day" align="right"></span>
+			<br>
+			<label for="hour">Hour : </label>
+			<span id="hour"></span>
+			<br>
+			<label for="weather">Weather : </label>
+			<span id="weather"></span>
+			<br>
+			<label for="forecast">Forecast : </label>
+			<span id="forecast"></span>
+			<br>
+			<label for="Budget">Budget : </label>
+			<span id="budget"></span>
+			<span> €</span>
+			<br>
+			<label for="sold">Sold : </label>
+			<span id="sold"></span>
+			<span id="soldMax"></span>
+			<br>
+			<br>
+			<span>Latitude : </span>
+			<br>
+			<span id="latitudeSpan"></span>
+			<br>
+			<span>Longitude : </span>
+			<br>
+			<span id="longitudeSpan"></span>
+			<br>
+			<span id="mouseEvent"></span>
+			<form action="#">
+				<button type="number" name="reset" class="resetButton" onclick="resetGame();">Reset</button>
+			</form>
+		</form>
+	</fieldset>
+  	<fieldset align="center" class="mapFS">
+		<legend align="center">
+			Map
+		</legend>
+		<canvas style="margin:0;padding:0;position:relative;" width='744px' height='482px'id="mapCanvas" class="mapCanvas"></canvas>
+	</fieldset>
+	<fieldset align="right" class="productionFS">
+		<legend align="center">
+			Day+1 Decisions
+		</legend>
+		<fieldset align="right">
+			<legend align="center">
+				Production
+			</legend>
+			<span id="quantity1Span"> Quantity :</span>
+			<input type="number" name="quantity1Input" id="quantity1Input" size="1" onkeyup="drinks">
+			<select id="drinkSelect1" class="selectDrinks">
+			</select>
+			<br>
+			<span id="price1Span"> Sell at :</span>
+			<input type="number" step="0.1" name="price1Input" id="price1Input" size="1" class="priceInputs">
+			<button id="applyDrinks1" type="number" name="apply" class="applyButtons" onclick="applyDrinks(1);">Apply</button>
+			<br><br>
+			<span id="quantity2Span"> Quantity :</span>
+			<input type="number" name="quantity2Input" id="quantity2Input" size="1" onkeyup="drinks">
+			<select id="drinkSelect2" class="selectDrinks">
+			</select>
+			<br>
+			<span id="price2Span"> Sell at :</span>
+			<input type="number" step="0.1" name="price2Input" id="price2Input" size="1" class="priceInputs">
+			<button id="applyDrinks2" type="number" name="apply" class="applyButtons" onclick="applyDrinks(2);">Apply</button>
+			<br><br>
+			<span id="quantity3Span"> Quantity :</span>
+			<input type="number" name="quantity3Input" id="quantity3Input" size="1" onkeyup="drinks">
+			<select id="drinkSelect3" class="selectDrinks">
+			</select>
+			<br>
+			<span id="price3Span"> Sell at :</span>
+			<input type="number" step="0.1" name="price3Input" id="price3Input" size="1" class="priceInputs">
+			<button id="applyDrinks3" type="number" name="apply" class="applyButtons" onclick="applyDrinks(3);">Apply</button>
+			<br>
+		</fieldset>
+		<fieldset>
+			<legend align="center">
+				Production Recap
+			</legend>
+			<div align="left">
+				<label align="left" for="drinks">Drinks : </label>
+				<span id="drinks"></span>
+				<br>
+				<label for="cost">Cost : </label>
+				<span id="cost"></span>
+				<span> €</span>
+			</div>
+			
+		</fieldset>
+		<fieldset align="right">
+			<legend align="center">
+				Ad Signs
+			</legend>
+			<div align="left" class="adSignsDivs1">
+				<span id="adLatitude">Latitude : </span>
+				<input type="number" name="adLatitudeInput" id="adLatitudeInput" size="1">
+				<br>
+				<span id="adLongitude">Longitude : </span>
+				<input type="number" name="adLongitudeInput" id="adLongitudeInput" size="1">
+				<br>
+				<span id="adSize">Size : </span>
+				<input type="number" name="adSizeInput" id="adSizeInput" size="1">
+			</div>
+			<br>
+			<button id="applyAdPanel" name="applyAdPanel" class="applyAdPanelButton" onclick="applyAdPanels();">Buy and place</button>
+		</fieldset>
+	</fieldset>
+	<fieldset align="right" class="chatFS">
+		<legend align="center">
+			Chat
+		</legend>
+		<div id="chat" class="chat"></div>
+		<input type="text" name="message" id="message" class="message" size="12">
+		<input type="button" id="sendToChat" value="send" size="1" onclick="postMessageOnChat();"/>
+	</fieldset>
+	</table>
+  </body>
+  </html>

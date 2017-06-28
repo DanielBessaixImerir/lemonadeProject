@@ -1,0 +1,141 @@
+.currentPlayerFS
+{
+	display: inline-block;
+	float: left;
+	height : 30px;
+	width: 11.2%;
+}
+
+.playerName
+{
+	top: 0;
+	display: inline-block;
+	width: 80%;
+	height: 80%;
+}
+
+.playerListFS
+{
+	display: inline-block;
+	float: left;
+	height : 30px;
+	width: 83.4%;
+}
+
+.situationFS
+{
+	display: inline-block;
+	float: left;
+	height : 500px;
+	min-width: 150px;
+	max-width: 150px;
+	bottom: 0;
+}
+
+.resetButton
+{
+	right: 0px;
+	bottom: 0px;
+}
+
+.applyAdPanelButton
+{
+	width: 100%;
+}
+
+.selectDrinks
+{
+	width:40%;
+}
+
+.applyButtons
+{
+	width: 40%;
+}
+
+.mapFS
+{
+	display: inline-block;
+	float: left;
+	max-height: 500px;
+}
+
+.map
+{
+	height: 480px;
+	width: 552px;
+}
+
+.mapCanvas
+{
+	display: inline-block;
+	background: url(map.png)
+}
+
+.productionFS
+{
+	display: inline-block;
+	float: left;
+	height : 500px;
+	min-width: 350px;
+	bottom: 0;
+}
+
+.priceInputs
+{
+	margin-left: 6%;
+}
+
+.adSignsDivs1{
+	display: inline-block;
+}
+
+.chatFS
+{
+	display: inline-block;
+	float: left;
+	height : 500px;
+	width: 250px;
+	bottom: 0;
+}
+
+.chatF
+{
+	display: inline-block;
+	width: 260px;
+}
+
+.chat
+{
+	height: 450px;
+	width: 250px;
+	overflow-y: scroll;
+	word-wrap: break-word;
+}
+
+.message
+{
+	float: bottom;
+	bottom: 0;
+	display: inline-block;
+	width: 150px;
+}
+
+.sendButton
+{
+	width:50px;
+}
+
+input[type=number]{
+    width: 50px;
+}
+
+.fieldsets
+{
+	height: 100%;
+}
+
+ body
+{
+	background-color: lightgreen;
+}
