@@ -47,12 +47,30 @@ public class Drink {
 	public void setCold(boolean isCold) {
 		this.isCold = isCold;
 	}
+	public void addSells(int i){
+		this.sells+=i;
+	}
 	
 	public boolean isWantedDrink(boolean alcohol, boolean cold){
+		if (alcohol && this.hasAlcohol()==alcohol){
+			return true;
+		}
 		if (this.isCold()==cold || this.hasAlcohol()==alcohol){
 			return true;
 		}
 		return false;
+	}
+	public boolean isWantedDrink(int drinkType){
+		switch(drinkType){
+		case (0):
+			return isWantedDrink(false,true);
+		case (1):
+			return isWantedDrink(false,false);
+		case (2):
+			return isWantedDrink(true,true);
+		default:
+			return false;
+		}
 	}
 
 	@Override

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import lemonadeProjectImerir.JSON.HtmlPOST;
+
 public class Player {
 	private String namePlayer;
 	private int cash;
@@ -146,6 +148,38 @@ public class Player {
 			i++;
 		}
 	return ret;
+	}
+	
+	public void buyWantedDrink(int wantedDrinksType){
+		int i=0;
+		boolean find=false;
+		while (i<this.drinks.size()&&!find){
+			if (this.drinks.get(i).isWantedDrink(wantedDrinksType)){
+				this.drinks.get(i).addSells(1);
+				this.sales+=1;
+				find=true;
+			}
+			i++;
+		}
+	}
+	
+	public float getPriceForWantedDrink(int wantedDrinksType){
+		int i=0;
+		while (i<this.drinks.size()){
+			if (this.drinks.get(i).isWantedDrink(wantedDrinksType)){
+				return this.drinks.get(i).getPrice();
+			}
+			i++;
+		}
+		return -1;
+	}
+	
+	public void sendSales(){
+		for (int i=0; i<this.drinks.size();i++){
+			if (this.drinks.get(i).getSells()>0){
+				HtmlPOST.sendJSON(this.namePlayer,this.drinks.get(i).getName(),this.drinks.get(i).getSells());
+			}
+		}
 	}
 
 	@Override

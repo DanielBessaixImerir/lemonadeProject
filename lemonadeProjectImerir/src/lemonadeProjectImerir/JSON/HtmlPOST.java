@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.google.gson.JsonObject;
+
 public class HtmlPOST {
 	 static void sendJSON(String strUrl, String name, String item, int quantity){
 	    	try {
@@ -22,14 +24,14 @@ public class HtmlPOST {
 		        connection.setRequestMethod("POST");
 		        connection.setDoOutput(true);
 		        connection.setRequestProperty("Content-Type", "application/json");
-		
+		        
+		        JsonObject json = new JsonObject();
+		        json.addProperty("player", name);
+		        json.addProperty("item", item);
+		        json.addProperty("quantity", quantity);
+		        System.out.println(json.toString());
 		        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());  
-		        out.write(
-		                "[{" +
-		                "\"player\":"+name +"," +
-		                "\"item\":"+item+"," +
-		                "\"quantity\":"+ quantity+
-		                "}]");
+		        out.write(json.toString());
 		        out.flush();
 		        out.close();
 		
@@ -50,5 +52,9 @@ public class HtmlPOST {
 				e.printStackTrace();
 			}
 	    }
+	 public static void sendJSON(String name, String item, int quantity){
+		 sendJSON("https://tranquil-reef-75630.herokuapp.com/sales",name,item,quantity);
+	 }
+	 
 
 }
