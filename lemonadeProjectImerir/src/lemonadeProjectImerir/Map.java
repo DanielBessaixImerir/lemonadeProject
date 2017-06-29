@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import lemonadeProjectImerir.JSON.HtmlGET;
+import lemonadeProjectImerir.JSON.JsonWrite;
+
 public class Map {
 	private Region region;
 	private ArrayList<Player> players;
@@ -125,7 +128,6 @@ public class Map {
 					//System.out.println("probaToBuy");
 					shop = getInterstedShop(coordSeller);
 					if(shop!=null){
-						System.out.println("shop!=null");
 						shop.buyWantedDrink(getWantedDrink());
 					}
 
@@ -360,8 +362,29 @@ public class Map {
 			if (players.get(i).getNamePlayer().equals(name)){
 				found = true;
 			}
+			i++;
 		}
 		return found;
+	}
+	
+	public static Map createMap(){
+		String jsonString=HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/map");
+		JsonObject jsonMap = JsonWrite.stringToJson(jsonString);
+		String metrologieString =HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/metrology");
+		JsonObject jsonMetrologie = JsonWrite.stringToJson(metrologieString);
+		System.out.println(jsonMetrologie.toString());
+		return new Map(jsonMap,jsonMetrologie);
+	}
+	
+	public void updateMap(){
+		String jsonString=HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/map");
+		JsonObject jsonMap = JsonWrite.stringToJson(jsonString);
+		//System.out.println(jsonMap.toString());
+		String metrologieString =HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/metrology");
+		JsonObject jsonMetrologie = JsonWrite.stringToJson(metrologieString);
+		//System.out.println(jsonMetrologie.toString());
+		this.majMap(jsonMap,jsonMetrologie);
+		System.out.println("hour : "+this.getHour());
 	}
 	
 	@Override

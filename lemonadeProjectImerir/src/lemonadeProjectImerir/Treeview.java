@@ -1,4 +1,4 @@
-package test;
+package lemonadeProjectImerir;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,6 +17,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import lemonadeProjectImerir.JSON.HtmlGET;
@@ -28,14 +30,13 @@ public class Treeview extends Application {
 	int height = 482;
 	int width = 744;
 	int height_h=50;
+	int width_t = 200;
 	int r,g,b;
-	static Map map;
+	Map map;
 	TreeTableView<String> treeTableView;
-	GraphicsContext gc, gd;
-	Canvas g_canvas; 
-	
-	
-	public static void main(String[] args) {
+	 
+	public static void main(String[] args) 
+		{
 				/*// TODO Auto-generated method stub
 				String jsonString=HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/map");
 				//String jsonString="{\"region\": {\"center\": {\"latitude\": 500, \"longitude\": 500}, \"span\": {\"latitudeSpan\": 1000.0, \"longitudeSpan\": 1000.0}}, \"ranking\": [\"Sitiel\", \"Tacos\"],\"itemsByPlayer\": {\"Sitiel\": [{\"influence\": 10.0, \"kind\": \"stand\", \"location\": {\"latitude\": 388.68290845865, \"longitude\": 385.779888526111}, \"owner\": \"Sitiel\"}], \"Tacos\": [{\"influence\": 10.0, \"kind\": \"stand\", \"location\": {\"latitude\": 751.437348914844, \"longitude\": 990.830151637961}, \"owner\": \"Tacos\"}]}, \"playerInfo\": {\"Sitiel\": {\"cash\": 650000.1, \"drinksOffered\": [{\"hasAlcohol\": false, \"isCold\": true, \"name\": \"Limonade\", \"price\": \"10000\"}], \"profit\": 0, \"sales\": 0}, \"Tacos\": {\"cash\": 124999.5, \"drinksOffered\": [{\"hasAlcohol\": false, \"isCold\": true, \"name\": \"Limonade\", \"price\": \"15000\"}], \"profit\": 0, \"sales\": 0}},\"drinksByPlayer\": {\"Sitiel\": [{\"hasAlcohol\": false, \"isCold\": true, \"name\": \"Limonade\", \"price\": \"10000\"}], \"Tacos\": [{\"hasAlcohol\": false, \"isCold\": true, \"name\": \"Limonade\", \"price\": \"15000\"}]}}";
@@ -48,53 +49,58 @@ public class Treeview extends Application {
 				map = new Map(jsonMap,jsonMetrologie);
 				
 				System.out.println(map.toString());*/
-		
+			
 				Application.launch(args);
-  }
+		}
+
   @Override
-	  public void start(Stage stage) {
-	      
-		    stage.setTitle("Iyokan");
-		    Group root = new Group();
-		    Group rootc = new Group();
-		    StackPane pop = new StackPane();
-		    Canvas canvas = new Canvas(width, height);
-		    g_canvas = new Canvas(width, height_h);
-		    gc = canvas.getGraphicsContext2D();	    
+  public void start(Stage stage) 
+  	{
+	     
+		    final Group root = new Group();
+		    final Group rootc = new Group();
+		    final StackPane pop = new StackPane();
+		    final Canvas canvas = new Canvas(width, height);
+		    final Canvas g_canvas = new Canvas(width+ width_t+50, height_h);
+		    final GraphicsContext gc = canvas.getGraphicsContext2D();
+		    final GraphicsContext gd = g_canvas.getGraphicsContext2D();
+		    map = Map.createMap();
+
 		    Image img = new Image("file:///C:/Users/Aymeric/Documents/1-Projet/map.png");
 		    gc.drawImage(img, 0, 0);
-		    gd = g_canvas.getGraphicsContext2D();
-		    update_map();
-		    weather_infos();
 		    
-		    player_infos();
+		   
+		    weather_infos(gd);
+		    
+		    player_infos(gc);
 		    rootc.getChildren().addAll(canvas,treeTableView);
 		    rootc.setLayoutY(height_h);
 		    pop.getChildren().addAll(g_canvas);
 		    pop.setStyle("-fx-background-color: #47acff");
 		    root.getChildren().addAll(rootc,pop);
-		    treeTableView.setLayoutX(width+1);
+		    
+		    stage.setTitle("Iyokan");
 		    stage.setScene(new Scene(root));
 		    stage.show();
 		    new Timer().schedule(
-		            new TimerTask() {
+		            new TimerTask() 
+		            	{
 		                @Override
-		                public void run() {		                	
-		                	weather_infos();
-		                	player_infos();
-		                	update_map();
-		                	
+		                public void run() 
+		                {		                	
+		                	weather_infos(gd);
+		                	map.updateMap();
+		                	map.simulateClients(100);
+		                	player_infos(gc);		                	
 		                }
-		            },0, 3000);  //30000 = TOUTES LES 30000 MILLISECONDES
-		    }
+		            	},0, 3000);  //30000 = TOUTES LES 30000 MILLISECONDES
+  	}
 	  private void drawShapes(GraphicsContext gc,MapItem kind,Coord location) {
 		  int x = XLongitude(location.getLongitude());
 		  int y = YLatitude(location.getLatitude());
-		  if(0> x | x>width && 0> y | y>height){
-			  System.out.println("Coordonnée hors map");
-		  }
+
 		  System.out.println("x:"+x+"y:"+y);
-		  int influence = 30;
+		  int influence = (int)(kind.getInfluence());
 		  int radiusY= (int) (influence* height/ map.getRegion().getSpan().getLatitude() );
 		  int radiusX= (int) (influence*width/map.getRegion().getSpan().getLongitude());
 		  
@@ -105,11 +111,10 @@ public class Treeview extends Application {
 	    }else{
 	    	gc.fillText("Ad", x, y);
 	    }
-	    	
 	    
 	    gc.setStroke(Color.rgb(r,g,b));
 	    gc.setLineWidth(2);
-	    gc.strokeOval(x, y-radiusY/2, radiusX, radiusY);
+	    gc.strokeOval( y-radiusY/2,x-radiusX/2, radiusY, radiusX);
 		
 		}
 	  
@@ -117,7 +122,7 @@ public class Treeview extends Application {
 		 * Cette fonction permet de convertir la latitude en coordonée X pour l'affichage sur le canvas
 		 */
 		private int YLatitude(float latitude){
-			int retour = (int) (height - height*(latitude-(map.getRegion().getCenter().getLatitude()-(map.getRegion().getSpan().getLatitude()/2)))/map.getRegion().getSpan().getLatitude());
+			int retour = (int) (height*(latitude-(map.getRegion().getCenter().getLatitude()-(map.getRegion().getSpan().getLatitude()/2)))/map.getRegion().getSpan().getLatitude());
 			return retour;
 		}
 		
@@ -125,31 +130,22 @@ public class Treeview extends Application {
 		 * Cette fonction permet de convertir la longitude en coordonée Y pour l'affichage sur le canvas
 		 */
 		private int XLongitude(float longitude){
-			int retour = (int) (height*(longitude-(map.getRegion().getCenter().getLongitude()-(map.getRegion().getSpan().getLongitude()/2)))/map.getRegion().getSpan().getLongitude());
+			int retour = (int) (width*(longitude-(map.getRegion().getCenter().getLongitude()-(map.getRegion().getSpan().getLongitude()/2)))/map.getRegion().getSpan().getLongitude());
 			return retour;
 		}
-		private void weather_infos(){
+		private void weather_infos(GraphicsContext gd){
 			
-			
+			gd.clearRect(0, 0, width_t+width, height_h);
 			gd.setTextAlign(TextAlignment.CENTER);
 			gd.setTextBaseline(VPos.CENTER);
-			gd.fillText("Hour : "+map.getHour()+"    Weather : "+map.getActualWeather()+"           Forecast : "+map.getForecast(), Math.round(g_canvas.getWidth()/2),Math.round(g_canvas.getHeight()/2));
+			gd.setFont(Font.font ("Verdana", 20));
+			gd.fillText("Hour : "+map.getHour()+"    Weather : "+map.getActualWeather()+"           Forecast : "+map.getForecast(), Math.round(gd.getCanvas().getWidth()/2),Math.round(gd.getCanvas().getHeight()/2));
 		}
 		
-		private void update_map(){
-			String jsonString=HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/map");
-			//String jsonString="{\"region\": {\"center\": {\"latitude\": 500, \"longitude\": 500}, \"span\": {\"latitudeSpan\": 1000.0, \"longitudeSpan\": 1000.0}}, \"ranking\": [\"Sitiel\", \"Tacos\"],\"itemsByPlayer\": {\"Sitiel\": [{\"influence\": 10.0, \"kind\": \"stand\", \"location\": {\"latitude\": 388.68290845865, \"longitude\": 385.779888526111}, \"owner\": \"Sitiel\"}], \"Tacos\": [{\"influence\": 10.0, \"kind\": \"stand\", \"location\": {\"latitude\": 751.437348914844, \"longitude\": 990.830151637961}, \"owner\": \"Tacos\"}]}, \"playerInfo\": {\"Sitiel\": {\"cash\": 650000.1, \"drinksOffered\": [{\"hasAlcohol\": false, \"isCold\": true, \"name\": \"Limonade\", \"price\": \"10000\"}], \"profit\": 0, \"sales\": 0}, \"Tacos\": {\"cash\": 124999.5, \"drinksOffered\": [{\"hasAlcohol\": false, \"isCold\": true, \"name\": \"Limonade\", \"price\": \"15000\"}], \"profit\": 0, \"sales\": 0}},\"drinksByPlayer\": {\"Sitiel\": [{\"hasAlcohol\": false, \"isCold\": true, \"name\": \"Limonade\", \"price\": \"10000\"}], \"Tacos\": [{\"hasAlcohol\": false, \"isCold\": true, \"name\": \"Limonade\", \"price\": \"15000\"}]}}";
-			JsonObject jsonMap = JsonWrite.stringToJson(jsonString);
-			System.out.println(jsonMap.toString());
-			String metrologieString =HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/metrology");
-			//String metrologieString = "{\"timestamp\": 264,\"weather\": [{\"dfn\": 0,\"weather\": \"cloudy\"},{\"dfn\": 1,\"weather\": \"cloudy\"}]}";
-			JsonObject jsonMetrologie = JsonWrite.stringToJson(metrologieString);
-			System.out.println(jsonMetrologie.toString());
-			map = new Map(jsonMap,jsonMetrologie);
-		}
+		
 	  
-	private void player_infos(){
-		
+	private void player_infos(GraphicsContext gc){
+		treeTableView=null;
 		TreeItem<String> play_tree = null;
 	  	
 	  	play_tree = new TreeItem<>();
@@ -171,15 +167,14 @@ public class Treeview extends Application {
 			player_info = new TreeItem<>(""+map.getPlayers().get(i).getNamePlayer());
 			cash = new TreeItem<>("Cash : "+map.getPlayers().get(i).getCash());
 			stand = new TreeItem<>("Stand");
-			coord_stand = new TreeItem<>("X : "+map.getPlayers().get(i).getStand().getLocation().getLatitude()+
-	        		" _ Y : "+map.getPlayers().get(i).getStand().getLocation().getLongitude());
+			coord_stand = new TreeItem<>("X : "+map.getPlayers().get(i).getStand().getLocation().getLongitude()+
+	        		" _ Y : "+map.getPlayers().get(i).getStand().getLocation().getLatitude()+"\n Influence : "+map.getPlayers().get(i).getStand().getInfluence());
 						drawShapes(gc,map.getPlayers().get(i).getStand(),map.getPlayers().get(i).getStand().getLocation());
 	        
 			ad_panel = new TreeItem<>("Ad_panel");
 	        for(int j=0; j<map.getPlayers().get(i).getAd().size();j++){
 	        	
-	        	coord_ad_panel = new TreeItem<>("X : "+map.getPlayers().get(i).getAd().get(j).getLocation().getLatitude()+
-				" _ Y : "+map.getPlayers().get(i).getAd().get(j).getLocation().getLongitude());
+	        	coord_ad_panel = new TreeItem<>("X : "+map.getPlayers().get(i).getAd().get(j).getLocation().getLongitude()+" _ Y : "+map.getPlayers().get(i).getAd().get(j).getLocation().getLatitude()+"\n Influence : "+map.getPlayers().get(i).getAd().get(j).getInfluence());
 	        	drawShapes(gc,map.getPlayers().get(i).getAd().get(j),map.getPlayers().get(i).getAd().get(j).getLocation());
 	        }
 	        
@@ -187,7 +182,6 @@ public class Treeview extends Application {
 	        for(int j=0; j<map.getPlayers().get(i).getDrinks().size();j++){
 	        	drink_name = new TreeItem<>(""+map.getPlayers().get(i).getDrinks().get(j).getName()+" : "+map.getPlayers().get(i).getDrinks().get(j).getPrice());        	
 	        }
-	        
 	        
 	        //player_info.setExpanded(true);
 	        //stand.setExpanded(false);
@@ -198,17 +192,18 @@ public class Treeview extends Application {
 	        drinks.getChildren().addAll(drink_name);
 	        player_info.getChildren().addAll(cash, stand, ad_panel,drinks);
 	        play_tree.getChildren().add(player_info);
+	        
 	    }
 		
+			TreeTableColumn<String, String> column = new TreeTableColumn<>("Player Infos");
+		    column.setPrefWidth(width_t);
 		
-		TreeTableColumn<String, String> column = new TreeTableColumn<>("Player Infos");
-	    column.setPrefWidth(200);
-	
-	    column.setCellValueFactory((CellDataFeatures<String, String> p) -> new ReadOnlyStringWrapper(
-	            p.getValue().getValue()));
-	    play_tree.setExpanded(true);
-	    treeTableView = new TreeTableView<>(play_tree);
-	    treeTableView.getColumns().add(column);	
+		    column.setCellValueFactory((CellDataFeatures<String, String> p) -> new ReadOnlyStringWrapper(
+		            p.getValue().getValue()));
+		    play_tree.setExpanded(true);
+		    treeTableView = new TreeTableView<>(play_tree);
+		    treeTableView.getColumns().add(column);	
+		    treeTableView.setLayoutX(width+1);
 	    
 		}
 	

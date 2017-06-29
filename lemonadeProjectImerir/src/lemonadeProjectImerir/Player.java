@@ -175,6 +175,7 @@ public class Player {
 				this.drinks.get(i).addSells(1);
 				this.sales+=1;
 				find=true;
+				System.out.println("one sell!!!!!!!!!!!!!!!!!!!");
 			}
 			i++;
 		}
