@@ -59,6 +59,7 @@ public class Map {
 						newArrayPlayer.add(this.players.get(i));
 					}
 				}
+				this.players=newArrayPlayer;
 			}
 		}
 		for (int i =0 ; i<jsonRanking.size();i++){                      // ajout ou maj des joueurs
