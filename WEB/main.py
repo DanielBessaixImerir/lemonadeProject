@@ -149,7 +149,7 @@ def postMetrology():
 def postSales():
     jsonSale = request.get_json()
 
-    jsonReturn = {'sales':0,'stock':0}
+    jsonReturn = {'sales':0,'stock':0} # sales/stock
 
     name = jsonSale['player']
     item = jsonSale['item']
@@ -160,7 +160,8 @@ def postSales():
     today = int(db.select("SELECT current_hour FROM current_day WHERE day_name = 'today'")[0]['current_hour']/24)
     standId = db.select("SELECT stand_id FROM Player WHERE player_name= '"+name+"'")[0]['stand_id']
     drinkId = db.select("SELECT drink_id FROM drink WHERE drink_name='"+ item +"'")[0]['drink_id']
-	
+    playerBudget = db.select("SELECT player_budget FROM player WHERE player_name = '"+ name +"'")[0]['player_budget']
+ 
     stockId=db.select("""
 							SELECT stock_id FROM stock
 							WHERE day_value=@(today)
@@ -168,17 +169,35 @@ def postSales():
 							AND drink_id=@(drinkId);
     """, { 'today':today, 'standId':standId, 'drinkId':drinkId })[0]['stock_id']
 
+    drinkCost=db.select("""
+							SELECT stock_drink_cost FROM stock
+							WHERE day_value=@(today)
+							AND stand_id=@(standId)
+							AND drink_id=@(drinkId);
+    """, { 'today':today, 'standId':standId, 'drinkId':drinkId })[0]['stock_drink_cost']
+
     stockList = db.select("SELECT * FROM stock WHERE stand_id="+ str(standId) +" AND day_value="+ str(today) +";")
     for drink in stockList:
         jsonReturn['stock'] += drink['stock_quantity_before']
 
-    db.execute("""
-                    UPDATE stock SET stock_sales=@(salestot)
-                    WHERE stock_id = @(stockId);""",
-					{'salestot': str(quantity), 'stockId': str(stockId)})
     salesList = db.select("SELECT * FROM stock WHERE stand_id="+ str(standId) +" AND day_value="+ str(today) +";")
     for sales in stockList:
         jsonReturn['sales'] += sales['stock_sales']	
+
+    if (jsonReturn['sales'] + quantity) > jsonReturn['stock']:
+        quantity = jsonReturn['stock'] - jsonReturn['sales']
+
+    if (quantity) < jsonReturn['stock']:
+		
+        db.execute("""
+                    UPDATE stock SET stock_sales=@(salestot)
+                    WHERE stock_id = @(stockId);""",
+					{'salestot': str(jsonReturn['sales'] + quantity), 'stockId': str(stockId)})
+
+        db.execute("""
+                        UPDATE player SET player_budget=@(newBudget)
+                        WHERE stand_id = @(standId);""",
+				        {'newBudget': str(playerBudget+(quantity * drinkCost)), 'standId': str(standId)})
 
     db.close()
 

@@ -58,7 +58,7 @@
 			<br>
 			<span id="mouseEvent"></span>
 			<form action="#">
-				<button type="number" name="reset" class="resetButton" onclick="resetGame();">Reset</button>
+				<button type="number" name="reset" id="reset" class="resetButton" onclick="resetGame();">Reset</button>
 			</form>
 		</form>
 	</fieldset>
@@ -104,30 +104,16 @@
 			<button id="applyDrinks3" type="number" name="apply" class="applyButtons" onclick="applyDrinks(3);">Apply</button>
 			<br>
 		</fieldset>
-		<fieldset>
-			<legend align="center">
-				Production Recap
-			</legend>
-			<div align="left">
-				<label align="left" for="drinks">Drinks : </label>
-				<span id="drinks"></span>
-				<br>
-				<label for="cost">Cost : </label>
-				<span id="cost"></span>
-				<span> €</span>
-			</div>
-			
-		</fieldset>
 		<fieldset align="right">
 			<legend align="center">
 				Ad Signs
 			</legend>
 			<div align="left" class="adSignsDivs1">
-				<span id="adLatitude">Latitude : </span>
-				<input type="number" name="adLatitudeInput" id="adLatitudeInput" size="1">
-				<br>
-				<span id="adLongitude">Longitude : </span>
+				<span id="adLongitude">Latitude : </span>
 				<input type="number" name="adLongitudeInput" id="adLongitudeInput" size="1">
+				<br>
+				<span id="adLatitude">Longitude : </span>
+				<input type="number" name="adLatitudeInput" id="adLatitudeInput" size="1">
 				<br>
 				<span id="adSize">Size : </span>
 				<input type="number" name="adSizeInput" id="adSizeInput" size="1">
@@ -135,6 +121,7 @@
 			<br>
 			<button id="applyAdPanel" name="applyAdPanel" class="applyAdPanelButton" onclick="applyAdPanels();">Buy and place</button>
 		</fieldset>
+		
 	</fieldset>
 	<fieldset align="right" class="chatFS">
 		<legend align="center">

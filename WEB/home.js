@@ -1,8 +1,8 @@
 $(document).ready(function(){
 	//SETUP AND NECESSARY START-UP FUNCTIONS
 	setup();
-	drinks();
-	prices();
+//	drinks();
+//	prices();
 	updatePLayerList();
 	updateSituation();
 	checkAvailableDrinks();
@@ -12,6 +12,7 @@ $(document).ready(function(){
 	//document.getElementsByName("quantity2Input")[0].addEventListener('change', drinks);
 	//document.getElementsByName("quantity3Input")[0].addEventListener('change', drinks);
 	document.getElementsByName("adSizeInput")[0].addEventListener('change', adPrice);
+	$('reset').click(resetGame);
 	initDrawingListeners(); //drawing on canvas listeners, to use later.
 
 	//BACKGROUND TASKS
@@ -47,19 +48,19 @@ function resetGame(){
 		});;
 }
 
-function drinks(){
-	var nbDrinks = Number(document.getElementById("quantity1Input").value) + Number(document.getElementById("quantity2Input").value) 
-					+ Number(document.getElementById("quantity3Input").value)
-	document.getElementById("drinks").innerHTML = nbDrinks.toFixed(2);
-	prices();
-}
+//function drinks(){
+//	var nbDrinks = Number(document.getElementById("quantity1Input").value) + Number(document.getElementById("quantity2Input").value) 
+//					+ Number(document.getElementById("quantity3Input").value)
+//	document.getElementById("drinks").innerHTML = nbDrinks.toFixed(2);
+//	prices();
+//}
 
-function prices(){
-	var sellPrice = (Number(document.getElementById("price1Input").value) * Number(document.getElementById("quantity1Input").value)) 
-					+ (Number(document.getElementById("price2Input").value) * Number(document.getElementById("quantity2Input").value)) 
-					+ (Number(document.getElementById("price3Input").value) * Number(document.getElementById("quantity3Input").value))
-	document.getElementById("cost").innerHTML = sellPrice.toFixed(2);
-}
+//function prices(){
+//	var sellPrice = (Number(document.getElementById("price1Input").value) * Number(document.getElementById("quantity1Input").value)) 
+//					+ (Number(document.getElementById("price2Input").value) * Number(document.getElementById("quantity2Input").value)) 
+//					+ (Number(document.getElementById("price3Input").value) * Number(document.getElementById("quantity3Input").value))
+//	document.getElementById("cost").innerHTML = sellPrice.toFixed(2);
+//}
 
 function adPrice(){
 	var nbDrinks = Number(document.getElementById("adSize").value) * 4;//4 = arbitrary price
