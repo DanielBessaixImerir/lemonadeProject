@@ -78,4 +78,23 @@ public class Drink {
 		return "Drink [price=" + price + ", name=" + name + ", sells=" + sells + ", hasAlcohol=" + hasAlcohol
 				+ ", isCold=" + isCold + "]";
 	}
+
+	public boolean priceIndecent() {
+		int priceMax=0;
+		switch(this.name){
+		case "limonade":
+			priceMax=2;
+			break;
+		case "the":
+			priceMax=4;
+			break;
+		case "cocktail":
+			priceMax=6;
+			break;
+		}
+		if (this.price>priceMax){
+			return true;
+		}
+		return false;
+	}
 }

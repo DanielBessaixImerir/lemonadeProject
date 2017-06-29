@@ -182,10 +182,20 @@ public class Player {
 	}
 	
 	public float getPriceForWantedDrink(int wantedDrinksType){
+		return getPriceForWantedDrink(wantedDrinksType,false);
+	}
+	public float getPriceForWantedDrink(int wantedDrinksType,boolean antiTriche){
 		int i=0;
+		float price;
 		while (i<this.drinks.size()){
 			if (this.drinks.get(i).isWantedDrink(wantedDrinksType)){
-				return this.drinks.get(i).getPrice();
+				if (antiTriche && this.drinks.get(i).priceIndecent()){
+						price = 10000;
+				}
+				else{
+					price = this.drinks.get(i).getPrice();
+				}
+				return price;
 			}
 			i++;
 		}

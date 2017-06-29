@@ -137,9 +137,10 @@ public class Map {
 				coordSeller.setLongitude(longitude);
 				if (probaToBuy()){
 					//System.out.println("probaToBuy");
-					shop = getInterstedShop(coordSeller);
+					int wantedDrink = getWantedDrink();
+					shop = getInterstedShop(coordSeller,wantedDrink);
 					if(shop!=null){
-						shop.buyWantedDrink(getWantedDrink());
+						shop.buyWantedDrink(wantedDrink);
 					}
 
 				}
@@ -234,10 +235,10 @@ public class Map {
 		}
 	}
 	
-	private ArrayList<Player> getArrayOfInterstedShopByDrinks(ArrayList<Player> shop){
+	private ArrayList<Player> getArrayOfInterstedShopByDrinks(ArrayList<Player> shop, int wantedDrink){
 		ArrayList<Player> retour = new ArrayList<Player>();
 		boolean alcohol=false, cold=false;
-		switch (getWantedDrink()){
+		switch (wantedDrink){
 		case(0):
 			cold = true;
 		break;
@@ -264,12 +265,12 @@ public class Map {
 		return shop.get(nearestShopIndex);
 	}
 	
-	private Player getInterstedShop(Coord coordSeller){
+	private Player getInterstedShop(Coord coordSeller, int wantedDrink){
 		ArrayList<Player> shop = new ArrayList<Player>();
 		int shopRet=0;
 		shop = getArrayOfInterestedShopByInfluence(coordSeller);
 		//System.out.println("nbshop="+shop.size());
-		shop = getArrayOfInterstedShopByDrinks(shop);
+		shop = getArrayOfInterstedShopByDrinks(shop,wantedDrink);
 		if (shop.size()>1){
 			System.out.println("nbshop>1");
 			if (this.forecast==Weather.HEATWAVE){
@@ -295,11 +296,11 @@ public class Map {
 				}
 				float totalPrice=0;
 				for (int i=0; i<shop.size();i++){
-					probaPrice[i]+=shop.get(i).getPriceForWantedDrink(getWantedDrink());
+					probaPrice[i]+=shop.get(i).getPriceForWantedDrink(wantedDrink,true);
 				}
 				int priceTotal=0;
 				for (int i=0; i<shop.size();i++){
-					probaPrice[i]=(int)(totalPrice/shop.get(i).getPriceForWantedDrink(getWantedDrink()));
+					probaPrice[i]=(int)(totalPrice/shop.get(i).getPriceForWantedDrink(wantedDrink,true));
 					priceTotal+=probaPrice[i];
 				}
 				int totalProbPrice=0;
