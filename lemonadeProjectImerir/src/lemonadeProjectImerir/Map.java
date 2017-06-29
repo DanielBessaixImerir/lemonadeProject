@@ -24,6 +24,7 @@ public class Map {
 			System.out.println(jsonPlayerInfo.getAsJsonObject(playerName));
 			System.out.println(map.getAsJsonObject("itemsByPlayer").getAsJsonArray(playerName));
 			this.players.add(new Player(playerName,jsonPlayerInfo.getAsJsonObject(playerName),map.getAsJsonObject("itemsByPlayer").getAsJsonArray(playerName)));
+			System.out.println(map.getAsJsonObject("itemsByPlayer").getAsJsonArray(playerName));
 		}
 		this.setHour(metrologie.get("timestamp").getAsInt());
 		String weather;
@@ -265,7 +266,7 @@ public class Map {
 						proba[0]=probaPrice[0]+probaDistance[0];
 					}
 				}
-				int rand=(int)(Math.random()*proba[proba.length]);
+				int rand=(int)(Math.random()*proba[proba.length-1]);
 				int i=0;
 				while (rand<probaDistance[i]){
 					i++;
