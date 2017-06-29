@@ -28,10 +28,49 @@ public class Map {
 		}
 		this.setHour(metrologie.get("timestamp").getAsInt());
 		String weather;
-		weather = metrologie.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("weather").getAsString().toUpperCase();
-		this.actualWeather=Weather.valueOf(weather);
-		weather = metrologie.get("weather").getAsJsonArray().get(1).getAsJsonObject().get("weather").getAsString().toUpperCase();
-		this.forecast=Weather.valueOf(weather);
+		if ( metrologie.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("dfn").getAsInt()==0){
+			weather = metrologie.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("weather").getAsString().toUpperCase();
+			this.actualWeather=Weather.valueOf(weather);
+			weather = metrologie.get("weather").getAsJsonArray().get(1).getAsJsonObject().get("weather").getAsString().toUpperCase();
+			this.forecast=Weather.valueOf(weather);
+		}
+		else{
+			weather = metrologie.get("weather").getAsJsonArray().get(1).getAsJsonObject().get("weather").getAsString().toUpperCase();
+			this.actualWeather=Weather.valueOf(weather);
+			weather = metrologie.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("weather").getAsString().toUpperCase();
+			this.forecast=Weather.valueOf(weather);
+		}
+			
+	}
+	
+	public void majMap(JsonObject map, JsonObject metrologie){
+		JsonArray jsonRanking;
+		jsonRanking = map.getAsJsonArray("ranking");
+		JsonObject jsonPlayerInfo;
+		jsonPlayerInfo = map.getAsJsonObject("playerInfo");
+		for (int i =0 ; i<jsonRanking.size();i++){
+			if (!playerExistInArray(jsonRanking.get(i).getAsString(),this.getPlayers())){
+				this.players.add(new Player(jsonRanking.get(i).getAsString(),jsonPlayerInfo.getAsJsonObject(jsonRanking.get(i).getAsString()),map.getAsJsonObject("itemsByPlayer").getAsJsonArray(jsonRanking.get(i).getAsString())));
+			}
+			else{
+				this.players.get(i).majPlayer(jsonPlayerInfo.getAsJsonObject(jsonRanking.get(i).getAsString()),map.getAsJsonObject("itemsByPlayer").getAsJsonArray(jsonRanking.get(i).getAsString()));
+			}
+		}
+		this.setHour(metrologie.get("timestamp").getAsInt());
+		String weather;
+		if ( metrologie.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("dfn").getAsInt()==0){
+			weather = metrologie.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("weather").getAsString().toUpperCase();
+			this.actualWeather=Weather.valueOf(weather);
+			weather = metrologie.get("weather").getAsJsonArray().get(1).getAsJsonObject().get("weather").getAsString().toUpperCase();
+			this.forecast=Weather.valueOf(weather);
+		}
+		else{
+			weather = metrologie.get("weather").getAsJsonArray().get(1).getAsJsonObject().get("weather").getAsString().toUpperCase();
+			this.actualWeather=Weather.valueOf(weather);
+			weather = metrologie.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("weather").getAsString().toUpperCase();
+			this.forecast=Weather.valueOf(weather);
+		}
+				
 	}
 	
 	public Region getRegion() {
@@ -312,6 +351,17 @@ public class Map {
 			return false;
 		}
 		return false;
+	}
+	
+	private boolean playerExistInArray(String name, ArrayList<Player> players){
+		int i=0;
+		boolean found=false;
+		while(!found && i<players.size()){
+			if (players.get(i).getNamePlayer().equals(name)){
+				found = true;
+			}
+		}
+		return found;
 	}
 	
 	@Override
