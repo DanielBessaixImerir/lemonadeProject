@@ -66,7 +66,7 @@ public class Treeview extends Application {
 		    final GraphicsContext gd = g_canvas.getGraphicsContext2D();
 		    map = Map.createMap();
 
-		    Image img = new Image("file:img/map.png");
+		    Image img = new Image("file:///C:/Users/Aymeric/Documents/1-Projet/map.png");
 		    gc.drawImage(img, 0, 0);
 		    
 		   
