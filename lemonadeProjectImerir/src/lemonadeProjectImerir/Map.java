@@ -51,12 +51,22 @@ public class Map {
 		jsonRanking = map.getAsJsonArray("ranking");
 		JsonObject jsonPlayerInfo;
 		jsonPlayerInfo = map.getAsJsonObject("playerInfo");
-		for (int i =0 ; i<jsonRanking.size();i++){
+		for (int i=0; i<this.players.size();i++){                         // Suppression des joueurs inexistant
+			if (!playerExistInRanking(this.players.get(i).getNamePlayer(), jsonRanking)){
+				ArrayList<Player> newArrayPlayer = new ArrayList<Player>();
+				for (int j=0;j<this.players.size();j++){
+					if (i!=j){
+						newArrayPlayer.add(this.players.get(i));
+					}
+				}
+			}
+		}
+		for (int i =0 ; i<jsonRanking.size();i++){                      // ajout ou maj des joueurs
 			if (!playerExistInArray(jsonRanking.get(i).getAsString(),this.getPlayers())){
 				this.players.add(new Player(jsonRanking.get(i).getAsString(),jsonPlayerInfo.getAsJsonObject(jsonRanking.get(i).getAsString()),map.getAsJsonObject("itemsByPlayer").getAsJsonArray(jsonRanking.get(i).getAsString())));
 			}
 			else{
-				this.players.get(i).majPlayer(jsonPlayerInfo.getAsJsonObject(jsonRanking.get(i).getAsString()),map.getAsJsonObject("itemsByPlayer").getAsJsonArray(jsonRanking.get(i).getAsString()));
+				this.getPlayerByName(jsonRanking.get(i).getAsString()).majPlayer(jsonPlayerInfo.getAsJsonObject(jsonRanking.get(i).getAsString()),map.getAsJsonObject("itemsByPlayer").getAsJsonArray(jsonRanking.get(i).getAsString()));
 			}
 		}
 		this.setHour(metrologie.get("timestamp").getAsInt());
@@ -135,7 +145,6 @@ public class Map {
 			}
 		}
 	}
-	
 	/**
 	 * this function is used to get an ArrayList of shop who have an influence on a coord
 	 * @param coord
@@ -367,6 +376,18 @@ public class Map {
 		return found;
 	}
 	
+	private boolean playerExistInRanking(String name, JsonArray ranking){
+		int i=0;
+		boolean found=false;
+		while(!found && i<ranking.size()){
+			if (ranking.get(i).equals(name)){
+				found = true;
+			}
+			i++;
+		}
+		return found;
+	}
+	
 	public static Map createMap(){
 		String jsonString=HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/map");
 		JsonObject jsonMap = JsonWrite.stringToJson(jsonString);
@@ -391,6 +412,15 @@ public class Map {
 		for (int i=0; i<this.getPlayers().size();i++){
 			this.getPlayers().get(i).sendSales();
 		}	
+	}
+	
+	public Player getPlayerByName(String name){
+		for (int i =0; i<this.players.size();i++){
+			if (this.players.get(i).getNamePlayer().equals(name)){
+				return this.players.get(i);
+			}
+		}
+		return null;
 	}
 	
 	@Override
