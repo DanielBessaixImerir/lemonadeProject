@@ -24,6 +24,9 @@ CREATE TABLE Ad_Panel(
         panel_id        bigserial  NOT NULL ,
         panel_influence real NOT NULL DEFAULT 2.1,
         player_id       bigint NOT NULL ,
+        ad_panel_day    integer,
+        longitude       float,
+        latitude        float
         PRIMARY KEY (panel_id )
 );
 
@@ -41,15 +44,18 @@ CREATE TABLE Ingredient(
         ingredient_id             bigserial  NOT NULL ,
         ingredient_name           Varchar (25) NOT NULL ,
         ingredient_cost           real NOT NULL ,
+        hasAlcohol                boolean,
+        isCold                    boolean,
         PRIMARY KEY (ingredient_id ) ,
         UNIQUE (ingredient_name )
 );
 
 CREATE TABLE Drink(
-        drink_id   bigserial   NOT NULL ,
+        drink_id   bigserial    NOT NULL ,
         drink_name Varchar (25) NOT NULL ,
-        drink_type_hasAlcool Bool NOT NULL ,
-        drink_type_cold      Bool NOT NULL ,
+        drink_type_hasAlcool    Bool NOT NULL ,
+        drink_type_cold         Bool NOT NULL ,
+        drink_production_cost   float,
         PRIMARY KEY (drink_id )
 );
 
