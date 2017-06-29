@@ -387,6 +387,12 @@ public class Map {
 		System.out.println("hour : "+this.getHour());
 	}
 	
+	public void sendSales(){
+		for (int i=0; i<this.getPlayers().size();i++){
+			this.getPlayers().get(i).sendSales();
+		}	
+	}
+	
 	@Override
 	public String toString() {
 		String players ="\n		";

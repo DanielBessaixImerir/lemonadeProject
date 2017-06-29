@@ -34,6 +34,8 @@ public class Treeview extends Application {
 	int r,g,b;
 	Map map;
 	TreeTableView<String> treeTableView;
+	TreeItem<String> playTree;
+	int hour=-1;
 	 
 	public static void main(String[] args) 
 		{
@@ -64,7 +66,9 @@ public class Treeview extends Application {
 		    final Canvas g_canvas = new Canvas(width+ width_t+50, height_h);
 		    final GraphicsContext gc = canvas.getGraphicsContext2D();
 		    final GraphicsContext gd = g_canvas.getGraphicsContext2D();
+		    
 		    map = Map.createMap();
+		    
 
 		    Image img = new Image("file:///C:/Users/Aymeric/Documents/1-Projet/map.png");
 		    gc.drawImage(img, 0, 0);
@@ -90,7 +94,13 @@ public class Treeview extends Application {
 		                {		                	
 		                	weather_infos(gd);
 		                	map.updateMap();
-		                	map.simulateClients(100);
+		                	if (hour<map.getHour()){
+		                		hour=map.getHour();
+		                		map.simulateClients(100);
+		                		map.sendSales();
+			                	System.out.println(map.toString());
+			                			                
+		                	}
 		                	player_infos(gc);		                	
 		                }
 		            	},0, 3000);  //30000 = TOUTES LES 30000 MILLISECONDES
@@ -146,9 +156,9 @@ public class Treeview extends Application {
 	  
 	private void player_infos(GraphicsContext gc){
 		treeTableView=null;
-		TreeItem<String> play_tree = null;
+		playTree = null;
 	  	
-	  	play_tree = new TreeItem<>();
+		playTree = new TreeItem<>();
 		for(int i=0; i<map.getPlayers().size();i++)
 	    {
 			TreeItem<String> player_info = null;
@@ -191,7 +201,7 @@ public class Treeview extends Application {
 	        //drinks.setExpanded(false);
 	        drinks.getChildren().addAll(drink_name);
 	        player_info.getChildren().addAll(cash, stand, ad_panel,drinks);
-	        play_tree.getChildren().add(player_info);
+	        playTree.getChildren().add(player_info);
 	        
 	    }
 		
@@ -200,8 +210,8 @@ public class Treeview extends Application {
 		
 		    column.setCellValueFactory((CellDataFeatures<String, String> p) -> new ReadOnlyStringWrapper(
 		            p.getValue().getValue()));
-		    play_tree.setExpanded(true);
-		    treeTableView = new TreeTableView<>(play_tree);
+		    playTree.setExpanded(true);
+		    treeTableView = new TreeTableView<>(playTree);
 		    treeTableView.getColumns().add(column);	
 		    treeTableView.setLayoutX(width+1);
 	    
