@@ -1,6 +1,3 @@
-
-
-
 /* Define state machine */
 typedef enum
 {
@@ -17,10 +14,7 @@ typedef enum
 typedef enum
 {
   BS_IDLE,
-  BS_PRESSED,
-  BS_INCREASE,
-  BS_DECREASE,
-  BS_RESET
+
 } BUTTON_STATE;
 
 
@@ -31,17 +25,6 @@ BUTTON_STATE buttonState;
 
 
 //Macros
-#define BUTTON_PIN  A0
-#define BUTTON_UP  250
-#define BUTTON_DOWN  450
-#define BUTTON_RESET  1000
-
-
-//Shared variables
-unsigned long chrono;
-long second, hour;
-int randWeather, normalDay;
-boolean weatherGenerated;
 
 
 //Define clock function
@@ -59,29 +42,11 @@ void buttonInit();
 void buttonUpdate();
 void buttonOutput();
 
-
-
-
-void setup() {
-  Serial.begin(9600);
-  clockInit();
-  weatherInit();
-}
-
 void loop() {
   clockUpdate();
   clockOutput();
   weatherUpdate();
   weatherOutput();
-}
-
-
-
-void clockInit()
-{
-  chrono = millis();
-  second = 500;
-  hour = 0;
 }
 
 void clockUpdate()
@@ -101,9 +66,6 @@ void clockUpdate()
       break;
   }
 
-  cClock  = nextState;
-}
-
 void clockOutput()
 {
   switch (cClock)
@@ -112,26 +74,15 @@ void clockOutput()
       break;
 
     case C_OUTPUT:
-      hour ++;
-      chrono = millis();
-      Serial.print("[");
-      Serial.print(hour);           //Hour
-      Serial.print("|");
-      Serial.print(randWeather);  //Weather
-      Serial.println("]");
-      Serial.flush();
+
       break;
   }
 }
-
-
-
 
 void weatherInit()
 {
   weatherGenerated = false;
   randomSeed(analogRead(A5));
-}
 
 void weatherUpdate()
 {
@@ -139,12 +90,6 @@ void weatherUpdate()
   switch (weatherState)
   {
     case WS_IDLE:
-      if ((hour % 24 == 0) && !weatherGenerated)
-      {
-        nextState = WS_FORECAST;
-        weatherGenerated = true;
-      }
-      if ((hour % 24 == 1) && weatherGenerated)
       {
         weatherGenerated = false;
       }
@@ -155,8 +100,6 @@ void weatherUpdate()
       break;
   }
 
-  weatherState  = nextState;
-}
 
 void weatherOutput()
 {
@@ -167,18 +110,11 @@ void weatherOutput()
       break;
 
     case WS_FORECAST:
-      randWeather = random(0, 5);
       break;
   }
 }
 
 
-
-
-
-void buttonInit()
-{
-  pinMode(BUTTON_PIN, INPUT);
 }
 
 void buttonUpdate()
@@ -188,47 +124,10 @@ void buttonUpdate()
   switch (buttonState)
   {
     case BS_IDLE:
-      if (BUTTON_PIN)
-      {
-        nextState = BS_PRESSED;
-      }
-      break;
-
-    case BS_PRESSED:
-      if (BUTTON_PIN < BUTTON_UP)
-      {
-        nextState = BS_INCREASE;
-      }
-      else if (BUTTON_PIN < BUTTON_DOWN)
-      {
-        nextState = BS_DECREASE;
-      }
-      else if (BUTTON_PIN > BUTTON_RESET)
-      {
-        nextState = BS_RESET;
       }
       break;
 
     case BS_INCREASE:
-      if (!BUTTON_PIN)
-      {
-        nextState = BS_IDLE;
-      }
-      break;
-
-    case BS_DECREASE:
-      if (!BUTTON_PIN)
-      {
-        nextState = BS_IDLE;
-      }
-      break;
-
-    case BS_RESET:
-      if (!BUTTON_PIN)
-      {
-        nextState = BS_IDLE;
-      }
-      break;
   }
 
   buttonState = nextState;
@@ -238,14 +137,6 @@ void buttonOutput()
 {
   switch (buttonState)
   {
-    case BS_INCREASE:
-      second += 1000;
-      break;
-    case BS_DECREASE:
-      second -= 1000;
-      break;
-
-    case BS_RESET:
       second = normalDay;
       break;
   }
