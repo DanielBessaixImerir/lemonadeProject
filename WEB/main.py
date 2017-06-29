@@ -80,7 +80,7 @@ def createPlayer():
 	db.execute("""
 				INSERT INTO Player(player_name, player_budget) VALUES(@(name), @(budget));
 				INSERT INTO Stand(player_id, stand_influence) VALUES((SELECT player_id FROM Player WHERE player_name= @(name)), @(influence));
-				INSERT INTO Coordinates(longitude,latitude,stand_id) VALUES(@(strRandX),@(strRandY),(SELECT stand_id FROM Stand 					WHERE player_id=(SELECT player_id FROM Player WHERE player_name= @(name))));
+				INSERT INTO Coordinates(longitude,latitude,stand_id) VALUES(@(strRandY),@(strRandX),(SELECT stand_id FROM Stand 					WHERE player_id=(SELECT player_id FROM Player WHERE player_name= @(name))));
 				UPDATE Player SET stand_id=(SELECT stand_id FROM Stand WHERE player_id=(SELECT player_id FROM Player 
 				WHERE player_name= @(name))) WHERE player_id=(SELECT player_id FROM Player WHERE player_name= @(name));""", 
 	{
