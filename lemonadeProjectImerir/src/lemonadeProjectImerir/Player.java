@@ -34,6 +34,23 @@ public class Player {
 		this.color = new Color();
 	}
 	
+
+	public void majPlayer(JsonObject jsonPlayer, JsonArray jsonArrayMapItem) {
+		this.cash = jsonPlayer.get("cash").getAsInt();
+		this.sales = jsonPlayer.get("sales").getAsInt();
+		this.profit = jsonPlayer.get("profit").getAsFloat();
+		this.drinks = new ArrayList<Drink>();
+		this.mapItem = new ArrayList<MapItem>();
+		
+		JsonArray jsonArrayDrink = jsonPlayer.get("drinksOffered").getAsJsonArray();
+		for (int i=0;i<jsonArrayDrink.size();i++){
+			this.drinks.add(new Drink(jsonArrayDrink.get(i).getAsJsonObject()));
+		}
+		for (int i=0;i<jsonArrayMapItem.size();i++){
+			this.mapItem.add(new MapItem(jsonArrayMapItem.get(i).getAsJsonObject()));
+		}
+	}
+	
 	public Player(String name, JsonObject jsonPlayer){
 		this.namePlayer = name;
 		this.cash = jsonPlayer.get("cash").getAsInt();
@@ -191,4 +208,5 @@ public class Player {
 		return "Player [namePlayer=" + namePlayer + ", cash=" + cash + ", sales=" + sales + ", profit=" + profit
 				+ ", drinks=" + drinks + ", mapItem=" + mapItem + "]";
 	}
+
 }

@@ -10,8 +10,7 @@ public class MapItem {
 	
 	public MapItem(JsonObject jsonItem){
 		this.location = new Coord(jsonItem.get("location").getAsJsonObject(),false);
-		
-		if(jsonItem.get("kind").getAsString().equals(KindItem.AD.toString())){
+		if(jsonItem.get("kind").getAsString().toUpperCase().equals(KindItem.AD.toString())){
 			this.kind = KindItem.AD;
 		}else{
 			this.kind = KindItem.STAND;
