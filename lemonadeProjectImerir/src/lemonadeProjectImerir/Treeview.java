@@ -34,8 +34,6 @@ public class Treeview extends Application {
 	int r,g,b;
 	Map map;
 	TreeTableView<String> treeTableView;
-	TreeItem<String> playTree;
-	int hour=-1;
 	 
 	public static void main(String[] args) 
 		{
@@ -66,11 +64,9 @@ public class Treeview extends Application {
 		    final Canvas g_canvas = new Canvas(width+ width_t+50, height_h);
 		    final GraphicsContext gc = canvas.getGraphicsContext2D();
 		    final GraphicsContext gd = g_canvas.getGraphicsContext2D();
-		    
 		    map = Map.createMap();
-		    
 
-		    Image img = new Image("file:img/map.png");
+		    Image img = new Image("file:///C:/Users/Aymeric/Documents/1-Projet/map.png");
 		    gc.drawImage(img, 0, 0);
 		    
 		   
@@ -94,14 +90,9 @@ public class Treeview extends Application {
 		                {		                	
 		                	weather_infos(gd);
 		                	map.updateMap();
-		                	if (hour<map.getHour()){
-		                		hour=map.getHour();
-		                		map.simulateClients(100);
-		                		map.sendSales();
-			                	System.out.println(map.toString());
-			                			                
-		                	}
-		                	player_infos(gc);
+		                	map.simulateClients(100);
+		                	//player_infos(gc);
+		                	treeTableView.refresh();
 		                }
 		            	},0, 3000);  //30000 = TOUTES LES 30000 MILLISECONDES
   	}
@@ -155,13 +146,14 @@ public class Treeview extends Application {
 		
 	  
 	private void player_infos(GraphicsContext gc){
-		//this.treeTableView=null;
-		//playTree = null;
-	  	
-		playTree = new TreeItem<>(""+map.getHour());
+		
+		TreeItem<String> play_tree = new TreeItem<>();
+		TreeItem<String> player_info = null;
+		
+		
+	  
 		for(int i=0; i<map.getPlayers().size();i++)
-	    {	
-			TreeItem<String> player_info = null;
+	    {
 		  	TreeItem<String> cash = null;
 		  	TreeItem<String> stand = null;
 		  	TreeItem<String> coord_stand = null ;
@@ -170,21 +162,23 @@ public class Treeview extends Application {
 		    TreeItem<String> drinks = null;
 		  	TreeItem<String> drink_name = null;
 		  	
+		  	
 		  	r=map.getPlayers().get(i).getColor().getR();
 		  	g=map.getPlayers().get(i).getColor().getG();
 		  	b=map.getPlayers().get(i).getColor().getB();
 		  	
-			player_info = new TreeItem<>(map.getPlayers().get(i).getNamePlayer());
-			cash = new TreeItem<>("Cash : "+map.getPlayers().get(i).getCash());
-			stand = new TreeItem<>("Stand");
-			coord_stand = new TreeItem<>("X : "+map.getPlayers().get(i).getStand().getLocation().getLongitude()+
-	        		" _ Y : "+map.getPlayers().get(i).getStand().getLocation().getLatitude()+"\n Influence : "+map.getPlayers().get(i).getStand().getInfluence());
+		  	player_info = new TreeItem<>(""+map.getPlayers().get(i).getNamePlayer());
+		  	cash = new TreeItem<>("Cash : "+map.getPlayers().get(i).getCash());
+		  	stand = new TreeItem<>("Stand");
+		  	coord_stand = new TreeItem<>("Y : "+map.getPlayers().get(i).getStand().getLocation().getLongitude()+
+	        		" _ X : "+map.getPlayers().get(i).getStand().getLocation().getLatitude()+"\n Influence : "+map.getPlayers().get(i).getStand().getInfluence());
 						drawShapes(gc,map.getPlayers().get(i).getStand(),map.getPlayers().get(i).getStand().getLocation());
 	        
+			
 			ad_panel = new TreeItem<>("Ad_panel");
 	        for(int j=0; j<map.getPlayers().get(i).getAd().size();j++){
 	        	
-	        	coord_ad_panel = new TreeItem<>("X : "+map.getPlayers().get(i).getAd().get(j).getLocation().getLongitude()+" _ Y : "+map.getPlayers().get(i).getAd().get(j).getLocation().getLatitude()+"\n Influence : "+map.getPlayers().get(i).getAd().get(j).getInfluence());
+	        	coord_ad_panel = new TreeItem<>("Y : "+map.getPlayers().get(i).getAd().get(j).getLocation().getLongitude()+" _ X : "+map.getPlayers().get(i).getAd().get(j).getLocation().getLatitude()+"\n Influence : "+map.getPlayers().get(i).getAd().get(j).getInfluence());
 	        	drawShapes(gc,map.getPlayers().get(i).getAd().get(j),map.getPlayers().get(i).getAd().get(j).getLocation());
 	        }
 	        
@@ -195,14 +189,14 @@ public class Treeview extends Application {
 	        
 	        //player_info.setExpanded(true);
 	        //stand.setExpanded(false);
-	        stand.getChildren().setAll(coord_stand);
+	        stand.getChildren().addAll(coord_stand);
 	        //ad_panel.setExpanded(false);
-	        ad_panel.getChildren().setAll(coord_ad_panel);
+	        ad_panel.getChildren().addAll(coord_ad_panel);
 	        //drinks.setExpanded(false);
-	        drinks.getChildren().setAll(drink_name);
-	        player_info.getChildren().setAll(cash, stand, ad_panel,drinks);
-	        playTree.getChildren().setAll(player_info);
-	        
+	        drinks.getChildren().addAll(drink_name);
+	        player_info.getChildren().addAll(cash, stand, ad_panel,drinks);
+	        play_tree.getChildren().add(player_info);
+	        	        
 	    }
 		
 			TreeTableColumn<String, String> column = new TreeTableColumn<>("Player Infos");
@@ -210,18 +204,12 @@ public class Treeview extends Application {
 		
 		    column.setCellValueFactory((CellDataFeatures<String, String> p) -> new ReadOnlyStringWrapper(
 		            p.getValue().getValue()));
-		    playTree.setExpanded(true);
-		    treeTableView.refresh();
-		    //treeTableView = new TreeTableView<>(playTree);
-		    treeTableView = new TreeTableView<>();
-		    treeTableView.setRoot(playTree);
-		    //treeTableView.getColumns().setAll(column);
-		    treeTableView.getColumns().add(column);
-		    //treeTableView.refresh();
+		    play_tree.setExpanded(true);
+		    treeTableView = new TreeTableView<>(play_tree);
+		    //treeTableView = new TreeTableView<>(player_info);
+		    treeTableView.getColumns().add(column);	
 		    treeTableView.setLayoutX(width+1);
-		    System.out.println("ok");
-		    //treeTableView.getColumns().get(0).setVisible(false); 
-		    //treeTableView.getColumns().get(0).setVisible(true);   
+	    
 		}
 	
 }
