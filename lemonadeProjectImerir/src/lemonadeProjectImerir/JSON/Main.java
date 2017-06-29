@@ -22,6 +22,7 @@ public class Main {
 		if (Weather.CLOUDY == Weather.valueOf(test)){
 			System.out.println("coucou");
 		}*/
-		System.out.println(HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/metrology"));	
+		HtmlPOST.sendJSON("https://tranquil-reef-75630.herokuapp.com/sales", "Daniel", "limonade", 2);
+		//System.out.println(HtmlGET.getGETResponse("https://tranquil-reef-75630.herokuapp.com/metrology"));	
 	}
 }

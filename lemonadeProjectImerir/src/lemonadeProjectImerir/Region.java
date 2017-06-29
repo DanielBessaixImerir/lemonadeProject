@@ -23,10 +23,6 @@ public class Region {
 	public void setSpan(Coord span) {
 		this.span = span;
 	}
-	public void setRegionJson(JsonObject json){
-		Coord center = new Coord(0,0);
-		Coord span = new Coord(0,0);
-	}
 
 	@Override
 	public String toString() {

@@ -20,5 +20,22 @@ public class MainTest {
 		
 		Map map = new Map(jsonMap,jsonMetrologie);
 		System.out.println(map.toString());
+		Player player = findPlayerByName("Yannick",map);
+		map.simulateClients(50);
+		//player.getDrinks().get(0).addSells(60);
+		System.out.println(map.toString());
+		for (int i=0; i<map.getPlayers().size();i++){
+			map.getPlayers().get(i).sendSales();
+		}
+	}
+	
+	public static Player findPlayerByName(String name, Map map){
+		Player player = null;
+		for (int i=0; i<map.getPlayers().size();i++){
+			if (map.getPlayers().get(i).getNamePlayer().equals(name)){
+				player=map.getPlayers().get(i);
+			}
+		}
+		return player;
 	}
 }
